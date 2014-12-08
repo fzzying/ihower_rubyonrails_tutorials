@@ -31,7 +31,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html { @page_title = @event.name } # show.html.erb
       format.xml # show.xml.builder
-      format.json { render :json => { id: @event.id, name: @event.name }.to_json }
+      format.json { render :json => { id: @event.id, name: @event.name, category: @event.category, location: @event.location  }.to_json }
     end
   end
 
@@ -39,6 +39,7 @@ class EventsController < ApplicationController
   end
 
   def update
+    Rails.logger.debug("event:\t #{@event_params}")
     if @event.update(event_params)
       flash[:notice] = "event was successfully updated"
       redirect_to event_url(@event)
@@ -57,7 +58,7 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:name, :description, :category_id)
+    params.require(:event).permit(:name, :description, :category_id, :location_attributes => [:name])
   end
 
   def set_event
