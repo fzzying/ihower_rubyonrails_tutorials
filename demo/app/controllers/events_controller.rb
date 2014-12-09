@@ -1,8 +1,9 @@
 class EventsController < ApplicationController
-  before_action :set_event, :only => [:show, :edit, :update, :destroy]
+  before_action :set_event, :only => [:show, :edit, :update, :destroy, :dashboard]
 
   def index
-    @events = Event.page(params[:page]).per(5)
+    sort_by = (params[:order] == 'name') ? 'name' : 'created_at'
+    @events = Event.order(sort_by).page(params[:page]).per(5)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -55,10 +56,20 @@ class EventsController < ApplicationController
     redirect_to :action => :index
   end
 
+  def search
+    @events = Event.where( ["name like ?", "%#{params[:keyword]}%"] ).page(params[:page]).per(5)
+    render :action => :index
+  end
+
+  def dashboard
+  end
+
   private
 
   def event_params
-    params.require(:event).permit(:name, :description, :category_id, :location_attributes => [:name])
+    params.require(:event).permit(:name, :description, :category_id, \
+                                  :location_attributes => [:name, :_destroy, :id], \
+                                  :group_ids => [] )
   end
 
   def set_event

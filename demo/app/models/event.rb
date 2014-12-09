@@ -10,4 +10,22 @@ class Event < ActiveRecord::Base
   validates_presence_of :name
   delegate :name, :to => :category, :prefix => true, :allow_nil => true
   delegate :name, :to => :location, :prefix => true, :allow_nil => true
+
+  def closed?
+    self.status == "CLOSED"
+  end
+
+  def open?
+    !self.closed?
+  end
+
+  def open!
+    self.status = "OPEN"
+    self.save!
+  end
+
+  def close!
+    self.status = "CLOSED"
+    self.save!
+  end
 end

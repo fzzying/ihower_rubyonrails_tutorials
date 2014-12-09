@@ -1,3 +1,7 @@
+<%= form_tag search_events_path :method => :get do %>
+  <%= text_field_tag "keyword" %>
+  <%= submit_tag "Search" %>
+<% end %>
 <ul>
   <% @events.each do |event| %>
     <li>
@@ -8,9 +12,12 @@
       <%= button_to 'Delete', event_path(event), :method => :delete %>
       <%= link_to 'attendees', event_attendees_path(event) %>
       <%= link_to 'location', event_location_path(event) %>
+      <%= link_to 'Dashboard', dashboard_event_path(event)%>
     </li>
-    <% end %>
+  <% end %>
 </ul>
 <%= link_to 'New Event', new_event_path %>
 <%= link_to 'Atom feed', events_path(:format => :atom) %>
+<%= link_to 'Sort by Name', events_path(:order => 'name') %>
+<%= link_to 'Sort by Default', events_path %>
 <%= paginate @events %>

@@ -9,7 +9,7 @@
   <% else %>
     <%= link_to '[Close]', event_state_path(@event), :method =>
     :delete %>
-    <% end %>
+  <% end %>
 </p>
 <p>Group:
   <%= @event.groups.each do |g| %>
